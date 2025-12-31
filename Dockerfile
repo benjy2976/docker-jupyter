@@ -1,5 +1,5 @@
 # ===== Dockerfile (dev) =====
-FROM jupyter/base-notebook:lab-4.2.5
+FROM jupyter/base-notebook:latest
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
@@ -10,19 +10,19 @@ USER root
 # System deps for common scientific/DB/image stacks
 RUN apt-get update && apt-get install -y \
     build-essential \
+    git \
     libpq-dev \
     libgl1 \
     libglib2.0-0 \
+    pkg-config \
+    libcairo2-dev \
     tesseract-ocr \
     && rm -rf /var/lib/apt/lists/*
 
 # Python deps
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install --upgrade pip && \
-    pip install -r /tmp/requirements.txt && \
-    pip install "jupyterlab>=4.1,<5"
-
-USER ${NB_UID}
+    pip install -r /tmp/requirements.txt
 
 # Copiamos el proyecto (se sobre-montará en dev con volumes, pero permite ejecutar sin bind mount)
 COPY . /home/jovyan/
@@ -30,6 +30,8 @@ COPY . /home/jovyan/
 # Entrypoint simple
 COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+
+USER ${NB_UID}
 
 EXPOSE 8888
 

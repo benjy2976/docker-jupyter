@@ -8,8 +8,6 @@ djangorestframework
 django-rest-passwordreset
 django-cors-headers
 django-workers
-#JUPYTER
-jupyter
 selenium
 tensorflow
 matplotlib
@@ -33,27 +31,14 @@ selenium-wire
 PyMuPDF
 qrcode
 
-#sudo add-apt-repository ppa:deadsnakes/ppa
-#sudo apt update
-#sudo apt install python3.10
-#sudo apt install python3.9
-#sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 1
-#sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.9 2
-#update-alternatives --list python3
-#update-alternatives --config python3
-
-#sudo apt remove --purge python3-apt
-#sudo apt autoclean
-#sudo apt install python3-apt
-
-#sudo apt-get install libpq-dev
-#sudo apt-get install python<version>-dev
-#sudo apt-get install python-dev
-
-#pip install mod_wsgi
-#pip install mod_wsgi-standalone
-#mod_wsgi-express module-config
-#LoadModule wsgi_module "/opt/pry_web_desk/.venv/lib/python3.10/site-packages/mod_wsgi/server/mod_wsgi-py310.cpython-310-x86_64-linux-gnu.so"
-#WSGIPythonPath /usr/lib/python3.10
-#Listen 8080
-#WSGISocketPrefix /var/run/apache2/wsgi
+# JupyterLab
+JupyterLab>=4.1,<5
+# JupyterLab plugins (pip)
+jupyter-ai-chatgpt==0.5.0
+# GPT4All backend for local models
+gpt4all
+# JupyterLab language packs
+jupyterlab-language-pack-es-ES
+gpt_jupyterlab
+# se usa para acceder a modelos de Hugging Face
+huggingface_hub

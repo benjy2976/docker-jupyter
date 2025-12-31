@@ -1,11 +1,12 @@
 # ===== Dockerfile (dev) =====
-FROM python:3.11-slim
+FROM jupyter/base-notebook:lab-4.2.5
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-WORKDIR /home/jovyan
+WORKDIR /app
 
+USER root
 # System deps for common scientific/DB/image stacks
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -17,7 +18,11 @@ RUN apt-get update && apt-get install -y \
 
 # Python deps
 COPY requirements.txt /tmp/requirements.txt
-RUN pip install --upgrade pip && pip install -r /tmp/requirements.txt
+RUN pip install --upgrade pip && \
+    pip install -r /tmp/requirements.txt && \
+    pip install "jupyterlab>=4.1,<5"
+
+USER ${NB_UID}
 
 # Copiamos el proyecto (se sobre-montará en dev con volumes, pero permite ejecutar sin bind mount)
 COPY . /home/jovyan/
@@ -29,4 +34,4 @@ RUN chmod +x /entrypoint.sh
 EXPOSE 8888
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--allow-root", "--ServerApp.token=", "--ServerApp.password="]
+CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--allow-root", "--ServerApp.token=", "--ServerApp.password=", "--ServerApp.root_dir=/app"]

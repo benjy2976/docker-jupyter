@@ -2,11 +2,10 @@ services:
   jupyter:
     build: .
     container_name: pry_web_desk_jupyter
-    command: jupyter lab --ip=0.0.0.0 --port=8888 --allow-root --ServerApp.token='' --ServerApp.password='' --ServerApp.root_dir=/home/jovyan
     env_file:
       - .env
     volumes:
-      - ${JUPYTER_HOME}:/home/jovyan
+      - ${JUPYTER_HOME}:/app
     ports:
       - "8888:8888"
     networks:

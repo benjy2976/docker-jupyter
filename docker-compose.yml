@@ -6,6 +6,10 @@ services:
       - .env
     volumes:
       - ${JUPYTER_HOME}:/app
+      # Persist Jupyter config (e.g., jupyter_server_config.py)
+      - ./.jupyter:/home/jovyan/.jupyter
+      # Persist JupyterLab data/settings (workspaces, user settings, kernels)
+      - ./.jupyter-data:/home/jovyan/.local/share/jupyter
       - ./.cache/gpt4all:/home/jovyan/.cache/gpt4all
     ports:
       - "8888:8888"
@@ -14,11 +18,14 @@ services:
   ollama:
     image: ollama/ollama:latest
     container_name: pry_web_desk_ollama
+    entrypoint: ["/bin/bash", "-lc"]
+    command: ["bash /root/ollama-init.sh"]
     ports:
       - "11434:11434"
     volumes:
       - ./ollama:/root/.ollama
       - ./models:/models
+      - ./docker/ollama-init.sh:/root/ollama-init.sh:ro
     deploy:
       resources:
         reservations:

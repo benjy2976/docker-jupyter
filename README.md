@@ -114,3 +114,14 @@ docker compose exec jupyter mkdir -p /home/jovyan/.cache/gpt4all
 docker compose exec jupyter curl -L -o /home/jovyan/.cache/gpt4all \
   https://gpt4all.io/models/gguf/mistral-7b-instruct-v0.1.Q4_0.gguf
 ```
+
+
+# generar makefile de ollama
+
+```bash
+docker compose exec ollama bash -lc 'cat > /tmp/Modelfile <<EOF
+FROM /models/Mistral-7B-Instruct-v0.3.Q5_K_M.gguf
+PARAMETER temperature 0.7
+EOF
+ollama create mistral-7b-v0.3 -f /tmp/Modelfile'
+```

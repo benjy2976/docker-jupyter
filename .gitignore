@@ -2,3 +2,5 @@
 models/
 .cache
 ollama
+.jupyter
+.jupyter-data

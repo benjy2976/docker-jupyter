@@ -6,8 +6,26 @@ services:
       - .env
     volumes:
       - ${JUPYTER_HOME}:/app
+      - ./.cache/gpt4all:/home/jovyan/.cache/gpt4all
     ports:
       - "8888:8888"
+    networks:
+      - grh_network
+  ollama:
+    image: ollama/ollama:latest
+    container_name: pry_web_desk_ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./ollama:/root/.ollama
+      - ./models:/models
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
     networks:
       - grh_network
 

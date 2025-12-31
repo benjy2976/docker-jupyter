@@ -10,6 +10,7 @@ USER root
 # System deps for common scientific/DB/image stacks
 RUN apt-get update && apt-get install -y \
     build-essential \
+    curl \
     git \
     libpq-dev \
     libgl1 \
@@ -23,9 +24,6 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install --upgrade pip && \
     pip install -r /tmp/requirements.txt
-
-# Copiamos el proyecto (se sobre-montará en dev con volumes, pero permite ejecutar sin bind mount)
-COPY . /home/jovyan/
 
 # Entrypoint simple
 COPY docker/entrypoint.sh /entrypoint.sh

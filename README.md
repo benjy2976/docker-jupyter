@@ -13,12 +13,12 @@ pip install -U huggingface_hub
 
 Host (WSL):
 ```bash
-huggingface-cli login
+hf auth login
 ```
 
 Contenedor:
 ```bash
-docker compose exec jupyter huggingface-cli login
+docker compose exec jupyter hf auth login
 ```
 
 3) Descarga los modelos en `./models`:
@@ -26,21 +26,91 @@ docker compose exec jupyter huggingface-cli login
 Host (WSL):
 ```bash
 mkdir -p models
-huggingface-cli download TheBloke/Nous-Hermes-2-Llama-2-13B-GGUF \
-  nous-hermes-2-llama-2-13b.Q4_K_M.gguf \
-  --local-dir models --local-dir-use-symlinks False
-huggingface-cli download TheBloke/Nous-Hermes-2-Llama-2-13B-GGUF \
-  nous-hermes-2-llama-2-13b.Q5_K_M.gguf \
-  --local-dir models --local-dir-use-symlinks False
+#mistral
+hf download TheBloke/Mistral-7B-Instruct-v0.2-GGUF \
+ mistral-7b-instruct-v0.2.Q4_K_M.gguf \
+  --local-dir models
+hf download MaziyarPanahi/Mistral-7B-Instruct-v0.3-GGUF \
+ Mistral-7B-Instruct-v0.3.Q4_K_M.gguf \
+  --local-dir models
+#Llama
+hf download   bartowski/Meta-Llama-3.1-8B-Instruct-GGUF \
+  Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf \
+  --local-dir /app/jupyter/models
+hf download \
+  bartowski/Meta-Llama-3.1-8B-Instruct-GGUF \
+  Meta-Llama-3.1-8B-Instruct-Q5_K_M.gguf \
+  --local-dir /app/jupyter/models
+
+#QWEN
+#Opción recomendada: Q4_K_M (3 partes)
+mkdir -p jupyter/models/qwen2.5-14b-instruct-q4_k_m
+
+hf download Qwen/Qwen2.5-14B-Instruct-GGUF \
+  qwen2.5-14b-instruct-q4_k_m-00001-of-00003.gguf \
+  --local-dir jupyter/models/qwen2.5-14b-instruct-q4_k_m
+
+hf download Qwen/Qwen2.5-14B-Instruct-GGUF \
+  qwen2.5-14b-instruct-q4_k_m-00002-of-00003.gguf \
+  --local-dir jupyter/models/qwen2.5-14b-instruct-q4_k_m
+
+hf download Qwen/Qwen2.5-14B-Instruct-GGUF \
+  qwen2.5-14b-instruct-q4_k_m-00003-of-00003.gguf \
+  --local-dir jupyter/models/qwen2.5-14b-instruct-q4_k_m
+
+#Opción “más calidad”: Q5_K_M (3 partes)
+
+mkdir -p jupyter/models/qwen2.5-14b-instruct-q5_k_m
+
+hf download Qwen/Qwen2.5-14B-Instruct-GGUF \
+  qwen2.5-14b-instruct-q5_k_m-00001-of-00003.gguf \
+  --local-dir jupyter/models/qwen2.5-14b-instruct-q5_k_m
+
+hf download Qwen/Qwen2.5-14B-Instruct-GGUF \
+  qwen2.5-14b-instruct-q5_k_m-00002-of-00003.gguf \
+  --local-dir jupyter/models/qwen2.5-14b-instruct-q5_k_m
+
+hf download Qwen/Qwen2.5-14B-Instruct-GGUF \
+  qwen2.5-14b-instruct-q5_k_m-00003-of-00003.gguf \
+  --local-dir jupyter/models/qwen2.5-14b-instruct-q5_k_m
+
+# Opcion de mas ligereza (Q3_K_M)
+mkdir -p jupyter/models/qwen2.5-14b-q3km
+
+hf download \
+  Qwen/Qwen2.5-14B-Instruct-GGUF \
+  qwen2.5-14b-instruct-q3_k_m-00001-of-00002.gguf \
+  --local-dir jupyter/models/qwen2.5-14b-q3km
+hf download \
+  Qwen/Qwen2.5-14B-Instruct-GGUF \
+  qwen2.5-14b-instruct-q3_k_m-00002-of-00002.gguf \
+  --local-dir jupyter/models/qwen2.5-14b-q3km
+
 ```
 
 Contenedor:
 ```bash
-docker compose exec jupyter bash -lc 'mkdir -p /app/models && \
-huggingface-cli download TheBloke/Nous-Hermes-2-Llama-2-13B-GGUF \
-  nous-hermes-2-llama-2-13b.Q4_K_M.gguf \
-  --local-dir /app/models --local-dir-use-symlinks False && \
-huggingface-cli download TheBloke/Nous-Hermes-2-Llama-2-13B-GGUF \
-  nous-hermes-2-llama-2-13b.Q5_K_M.gguf \
-  --local-dir /app/models --local-dir-use-symlinks False'
+docker compose exec jupyter mkdir -p /app/models
+docker compose exec jupyter hf download TheBloke/Mistral-7B-Instruct-v0.2-GGUF \
+ mistral-7b-instruct-v0.2.Q4_K_M.gguf \
+  --local-dir /app/models
+docker compose exec jupyter hf download MaziyarPanahi/Mistral-7B-Instruct-v0.3-GGUF \
+ Mistral-7B-Instruct-v0.3.Q4_K_M.gguf \
+  --local-dir /app/models
+```
+
+## Descargar modelo GPT4All (Mistral 7B Instruct v0.1 Q4_0)
+
+Host (WSL):
+```bash
+mkdir -p ~/.cache/gpt4all
+curl -LO --output-dir .cache/gpt4all/ \
+  https://gpt4all.io/models/gguf/mistral-7b-instruct-v0.1.Q4_0.gguf
+```
+
+Contenedor:
+```bash
+docker compose exec jupyter mkdir -p /home/jovyan/.cache/gpt4all
+docker compose exec jupyter curl -L -o /home/jovyan/.cache/gpt4all \
+  https://gpt4all.io/models/gguf/mistral-7b-instruct-v0.1.Q4_0.gguf
 ```

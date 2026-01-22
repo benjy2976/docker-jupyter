@@ -13,6 +13,8 @@ services:
       - ./.cache/gpt4all:/home/jovyan/.cache/gpt4all
     ports:
       - "8888:8888"
+      - "5900:5900"
+      - "6080:6080"
     networks:
       - grh_network
   ollama:
